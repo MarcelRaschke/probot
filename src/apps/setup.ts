@@ -2,16 +2,20 @@ import bodyParser from "body-parser";
 import { exec } from "child_process";
 import { Request, Response } from "express";
 import updateDotenv from "update-dotenv";
-import { Application } from "../application";
-import { ManifestCreation } from "../manifest-creation";
 
+import { Probot } from "../probot";
+import { ManifestCreation } from "../manifest-creation";
 import { getLoggingMiddleware } from "../server/logging-middleware";
+import { ApplicationFunctionOptions } from "../types";
 
 export const setupAppFactory = (
   host: string | undefined,
   port: number | undefined
 ) =>
-  async function setupApp(app: Application) {
+  async function setupApp(
+    app: Probot,
+    { getRouter }: ApplicationFunctionOptions
+  ) {
     const setup: ManifestCreation = new ManifestCreation();
 
     // If not on Glitch or Production, create a smee URL
@@ -22,7 +26,11 @@ export const setupAppFactory = (
       await setup.createWebhookChannel();
     }
 
-    const route = app.route();
+    if (!getRouter) {
+      throw new Error("getRouter is required to use the setup app");
+    }
+
+    const route = getRouter();
 
     route.use(getLoggingMiddleware(app.log));
 
@@ -84,7 +92,7 @@ export const setupAppFactory = (
   };
 
 function printWelcomeMessage(
-  app: Application,
+  app: Probot,
   host: string | undefined,
   port: number | undefined
 ) {
@@ -108,7 +116,7 @@ function printWelcomeMessage(
   });
 }
 
-function printRestartMessage(app: Application) {
+function printRestartMessage(app: Probot) {
   app.log.info("");
   app.log.info("Probot has been set up, please restart the server!");
   app.log.info("");

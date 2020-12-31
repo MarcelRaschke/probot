@@ -1,5 +1,6 @@
-console.log("waddafugg");
-
+/**
+ * @param {import('../../lib').Probot}
+ */
 module.exports = (app) => {
   // Your code here
   app.log.info("Yay! The app was loaded!");
@@ -12,6 +13,9 @@ module.exports = (app) => {
     const params = context.issue({ body: "Hello World!" });
 
     // Post a comment on the issue
-    await context.github.issues.createComment(params);
+    await context.octokit.issues.createComment(params).then(
+      () => console.log("issue comment created"),
+      (error) => console.log("not ok", error)
+    );
   });
 };

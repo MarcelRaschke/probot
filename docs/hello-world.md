@@ -12,7 +12,7 @@ module.exports = (app) => {
 };
 ```
 
-The `app` parameter is an instance of [`Application`](https://probot.github.io/api/latest/classes/application.html) and gives you access to all of the GitHub goodness.
+The `app` parameter is an instance of [`Probot`](https://probot.github.io/api/latest/classes/probot.html) and gives you access to all of the GitHub goodness.
 
 `app.on` will listen for any [webhook events triggered by GitHub](./webhooks.md), which will notify you when anything interesting happens on GitHub that your app wants to know about.
 
@@ -25,7 +25,7 @@ module.exports = (app) => {
 };
 ```
 
-The `context` passed to the event handler includes everything about the event that was triggered, as well as some helpful properties for doing something useful in response to the event. `context.github` is an authenticated GitHub client that can be used to [make API calls](./github-api.md), and allows you to do almost anything programmatically that you can do through a web browser on GitHub.
+The `context` passed to the event handler includes everything about the event that was triggered, as well as some helpful properties for doing something useful in response to the event. `context.octokit` is an authenticated GitHub client that can be used to [make API calls](./github-api.md), and allows you to do almost anything programmatically that you can do through a web browser on GitHub.
 
 Here is an example of an autoresponder app that comments on opened issues:
 
@@ -38,7 +38,7 @@ module.exports = (app) => {
     const params = context.issue({ body: "Hello World!" });
 
     // Post a comment on the issue
-    return context.github.issues.createComment(params);
+    return context.octokit.issues.createComment(params);
   });
 };
 ```

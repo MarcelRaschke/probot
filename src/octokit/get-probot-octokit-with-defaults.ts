@@ -13,8 +13,8 @@ type Options = {
   githubToken?: string;
   appId?: number;
   privateKey?: string;
-  redisConfig?: Redis.RedisOptions;
-  throttleOptions?: any;
+  redisConfig?: Redis.RedisOptions | string;
+  baseUrl?: string;
 };
 
 /**
@@ -44,18 +44,12 @@ export function getProbotOctokitWithDefaults(options: Options) {
   });
 
   const defaultOptions: any = {
-    baseUrl:
-      process.env.GHE_HOST &&
-      `${process.env.GHE_PROTOCOL || "https"}://${process.env.GHE_HOST}/api/v3`,
+    baseUrl: options.baseUrl,
     auth: authOptions,
   };
 
-  if (options.throttleOptions || octokitThrottleOptions) {
-    defaultOptions.throttle = Object.assign(
-      {},
-      options.throttleOptions,
-      octokitThrottleOptions
-    );
+  if (octokitThrottleOptions) {
+    defaultOptions.throttle = octokitThrottleOptions;
   }
 
   return options.Octokit.defaults((instanceOptions: any) => {

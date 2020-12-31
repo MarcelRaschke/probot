@@ -40,12 +40,12 @@ module.exports = (app) => {
 };
 ```
 
-You can also use the wildcard event (`*`) to listen for any event that your app is subscribed to:
+You can also use `app.webhooks.onAny()` to listen for any event that your app is subscribed to:
 
 ```js
 module.exports = (app) => {
-  app.on("*", async (context) => {
-    context.log.info({ event: context.event, action: context.payload.action });
+  app.webhooks.onAny(async (context) => {
+    context.log.info({ event: context.name, action: context.payload.action });
   });
 };
 ```
