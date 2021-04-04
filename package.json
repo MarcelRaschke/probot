@@ -48,7 +48,7 @@
     "@probot/octokit-plugin-config": "^1.0.0",
     "@probot/pino": "^2.2.0",
     "@types/express": "^4.17.9",
-    "@types/ioredis": "^4.17.8",
+    "@types/ioredis": "^4.22.0",
     "@types/pino": "^6.3.4",
     "@types/pino-http": "^5.0.6",
     "@types/update-notifier": "^5.0.0",
